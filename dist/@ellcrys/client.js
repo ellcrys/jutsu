@@ -34,6 +34,7 @@ var Client = /** @class */ (function () {
         };
         var buf = Buffer.from(JSON.stringify(req));
         this.socket.write(buf);
+        this.socket.end();
     };
     Client.prototype.run = function () {
         var _this = this;

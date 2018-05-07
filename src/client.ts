@@ -66,6 +66,7 @@ export class Client {
         const buf = Buffer.from(JSON.stringify(req))
 
         this.socket.write(buf)
+        this.socket.end()
     }
 
 
