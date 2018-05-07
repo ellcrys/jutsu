@@ -1,0 +1,30 @@
+{
+  "name": "@ellcrys/jutsu",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "url": "https://github.com/ellcrys/jutsu"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test-server": "ts-node src/testServer.ts",
+    "test-client": "ts-node src/testClient.ts"
+  },
+  "author": "",
+  "main": "./dist/@ellcrys/jutsu.js",
+  "types": "./jutsu.d.ts",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.0.0",
+    "@types/pubsub-js": "^1.5.18",
+    "dts-generator": "^2.1.0",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^4.0.2",
+    "ts-node": "6.0.0",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "pubsub-js": "^1.6.0",
+    "typescript-map": "0.0.6"
+  }
+}

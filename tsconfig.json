@@ -1,0 +1,25 @@
+{
+    "files":[
+        "src/jutsu.ts",
+        "src/client.ts",
+        "src/server.ts"
+    ],
+    "compilerOptions": {
+      "baseUrl": ".",
+      "target": "es5",
+      "moduleResolution": "node",
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "declaration": true,
+      "strict": true,
+      "noFallthroughCasesInSwitch": true,
+      "rootDir": "src",
+      "outDir": "dist/@ellcrys",
+      "lib": [
+        "es5", "dom", "es2015.promise", "es2015.collection", "es2015.iterable", "es2015.core"
+      ],
+      "paths": {
+        "@ellcrys/*": ["./*"]
+      }
+    }
+  }
