@@ -42,7 +42,6 @@ var Client = /** @class */ (function () {
         });
         this.socket.on("data", function (buf) {
             _this.eventHub.publish("client.data", buf);
-            _this.socket.end();
         });
     };
     Client.prototype.runWithServer = function (server) {
@@ -64,7 +63,6 @@ var Client = /** @class */ (function () {
                 Client: _this,
                 Data: buf
             });
-            _this.socket.end();
         });
     };
     return Client;

@@ -25,8 +25,6 @@ export class Client {
 
     private eventHub: PubSubJS.Base;
 
-    
-
     constructor(private socket: net.Socket) {
         this.eventHub = PubSub
         this.handlers = new TSMap<string, Handler>()
@@ -77,7 +75,6 @@ export class Client {
 
         this.socket.on("data", (buf: Buffer) => {
             this.eventHub.publish("client.data", buf)
-            this.socket.end()
         })
     }
 
@@ -101,8 +98,6 @@ export class Client {
                 Client: this,
                 Data: buf
             })
-
-            this.socket.end()
         })
     }
 }
