@@ -66,7 +66,6 @@ export class Client {
         const buf = Buffer.from(JSON.stringify(req))
 
         this.socket.write(buf)
-        this.socket.end()
     }
 
 
@@ -78,6 +77,7 @@ export class Client {
 
         this.socket.on("data", (buf: Buffer) => {
             this.eventHub.publish("client.data", buf)
+            this.socket.end()
         })
     }
 
@@ -101,6 +101,8 @@ export class Client {
                 Client: this,
                 Data: buf
             })
+
+            this.socket.end()
         })
     }
 }
