@@ -35,8 +35,7 @@ var Client = /** @class */ (function () {
             params: [data],
             id: this.count++
         };
-        console.log(req);
-        var buf = Buffer.from(JSON.stringify(req) + "\n");
+        var buf = Buffer.from(JSON.stringify(req));
         this.socket.write(buf);
     };
     Client.prototype.run = function () {
