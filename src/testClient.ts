@@ -9,7 +9,8 @@ let conn = net.createConnection({
 
 let client = new Client(conn)
 client.handle("hello", (data)=>{
-    console.log("hello called:", data.name)
+    console.log(data)
+    console.log("hello called:", data[0].name)
 })
 client.run()
 
