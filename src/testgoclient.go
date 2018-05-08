@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/cenkalti/rpc2" //A modified version to support JSON instead of gob
+	"github.com/cenkalti/rpc2" 
 	"github.com/cenkalti/rpc2/jsonrpc"
 )
 
