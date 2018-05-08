@@ -1,5 +1,5 @@
 # jutsu
-Jutsu : Bi-directional Communications Library Over TCP connection
+Jutsu : Bi-directional JSON RPC Library
 
 ## Installation
 `npm i --save git+ssh://git@github.com/ellcrys/jutsu.git`
