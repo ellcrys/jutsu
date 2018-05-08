@@ -9,6 +9,7 @@ declare module '@ellcrys/client' {
 	    private socket;
 	    private handlers;
 	    private eventHub;
+	    private count;
 	    constructor(socket: net.Socket);
 	    handle(method: string, handleFunc: (...args: any[]) => any): void;
 	    call(method: string, data: any): void;
@@ -38,6 +39,7 @@ declare module '@ellcrys/server' {
 	    private handlers;
 	    eventHub: PubSubJS.Base;
 	    private socket;
+	    private count;
 	    constructor();
 	    handle(method: string, handleFunc: (client: Client, ...args: any[]) => any): void;
 	    onConnect(func: (client: Client) => void): void;

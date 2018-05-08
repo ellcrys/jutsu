@@ -9,6 +9,7 @@ var Server = /** @class */ (function () {
         this.eventHub = PubSub;
         this.handlers = new typescript_map_1.TSMap();
         this.socket = new net.Socket();
+        this.count = 0;
         this.onData();
     }
     Server.prototype.handle = function (method, handleFunc) {
@@ -50,12 +51,13 @@ var Server = /** @class */ (function () {
             var payload = JSON.parse(data.Data.toString());
             var resp = {
                 method: payload.method,
-                data: payload.data
+                params: payload.params,
+                id: _this.count++
             };
             if (_this.handlers.has(resp.method)) {
-                _this.handlers.get(resp.method).fn(data.Client, resp.data);
+                _this.handlers.get(resp.method).fn(data.Client, resp.params);
                 if (callback != null) {
-                    callback(resp.data);
+                    callback(resp.params);
                 }
             }
         });

@@ -8,14 +8,16 @@ var Client = /** @class */ (function () {
         this.socket = socket;
         this.eventHub = PubSub;
         this.handlers = new typescript_map_1.TSMap();
+        this.count = 0;
         this.eventHub.subscribe("client.data", function (msg, buf) {
             var payload = JSON.parse(buf.toString());
             var resp = {
                 method: payload.method,
-                data: payload.data
+                params: payload.params,
+                id: _this.count++
             };
             if (_this.handlers.has(resp.method)) {
-                _this.handlers.get(resp.method).fn(resp.data);
+                _this.handlers.get(resp.method).fn(resp.params);
             }
         });
     }
@@ -30,9 +32,11 @@ var Client = /** @class */ (function () {
     Client.prototype.call = function (method, data) {
         var req = {
             method: method,
-            data: data
+            params: [data],
+            id: this.count++
         };
-        var buf = Buffer.from(JSON.stringify(req));
+        console.log(req);
+        var buf = Buffer.from(JSON.stringify(req) + "\n");
         this.socket.write(buf);
     };
     Client.prototype.run = function () {
