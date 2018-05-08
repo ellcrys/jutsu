@@ -11,12 +11,14 @@ export interface Handler {
 
 interface Request {
     method: string,
-    data: any
+    params: any,
+    id:number
 }
 
 interface Response {
     method: string,
-    data: any
+    params: any,
+    id:number
 }
 
 export class Client {
@@ -25,20 +27,23 @@ export class Client {
 
     private eventHub: PubSubJS.Base;
 
+    private count:number;
+
     constructor(private socket: net.Socket) {
         this.eventHub = PubSub
         this.handlers = new TSMap<string, Handler>()
-
+        this.count = 0
         this.eventHub.subscribe("client.data", (msg:any, buf: Buffer) => {
             
             const payload = JSON.parse(buf.toString())
             const resp: Response = {
                 method: payload.method,
-                data: payload.data
+                params: payload.params,
+                id: this.count++
             }
 
             if (this.handlers.has(resp.method)) {
-                this.handlers.get(resp.method).fn(resp.data)
+                this.handlers.get(resp.method).fn(resp.params)
             }
         })
     }
@@ -59,9 +64,10 @@ export class Client {
     call(method: string, data: any) {
         const req: Request = {
             method: method,
-            data: data
+            params: data,
+            id: this.count++
         }
-        const buf = Buffer.from(JSON.stringify(req))
+        const buf = Buffer.from(JSON.stringify(req)+"\n")
 
         this.socket.write(buf)
     }

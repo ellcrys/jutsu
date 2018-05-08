@@ -23,7 +23,8 @@ export interface OnDataEvent {
 
 interface Response {
     method:string,
-    data: any
+    params: any,
+    id: number
 }
 
 export class Server{
@@ -34,11 +35,13 @@ export class Server{
 
     private socket: net.Socket
 
+    private count:number
 
     constructor(){
         this.eventHub = PubSub
         this.handlers = new TSMap<string, Handler>()
         this.socket  = new net.Socket()
+        this.count = 0; 
 
         this.onData()
     }
@@ -92,13 +95,14 @@ export class Server{
             const payload = JSON.parse(data.Data.toString())
             const resp:Response = {
                 method: payload.method,
-                data: payload.data
+                params: payload.params,
+                id: this.count++
             }
            
             if(this.handlers.has(resp.method)){
-                this.handlers.get(resp.method).fn(data.Client, resp.data)
+                this.handlers.get(resp.method).fn(data.Client, resp.params)
 
-                if (callback != null ) { callback(resp.data) }
+                if (callback != null ) { callback(resp.params) }
             }
         })
     }
