@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/ellcrys/rpc2" //A modified version to support JSON instead of gob
+	"github.com/cenkalti/rpc2" //A modified version to support JSON instead of gob
+	"github.com/cenkalti/rpc2/jsonrpc"
 )
 
 type Data struct {
@@ -22,13 +23,14 @@ type Response struct {
 }
 
 func main() {
-	conn, _ := net.Dial("tcp", "127.0.0.1:4000")
+	conn, _ := net.Dial("tcp4", "127.0.0.1:4000")
 
-	clt := rpc2.NewClient(conn)
+	clt := rpc2.NewClientWithCodec(jsonrpc.NewJSONCodec(conn))
 
 	go clt.Run()
 
 	clt.Handle("hello", func(client *rpc2.Client, args interface{}, resp *Response) error {
+
 		buf, err := json.Marshal(args)
 
 		if err != nil {

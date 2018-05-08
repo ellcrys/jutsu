@@ -5,7 +5,8 @@ import {Server, Client} from "./jutsu"
 let server = new Server()
 
 server.handle("add", (client:Client, data) =>{
-    const _data = JSON.parse(Buffer.from(data, 'base64').toString())
+    //console.log(Buffer.from(data[0], 'base64').toString())
+    const _data = JSON.parse(Buffer.from(data[0], 'base64').toString())
     console.log("add called: ", "foo")
 
     //talk back to client

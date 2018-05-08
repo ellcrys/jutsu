@@ -91,7 +91,6 @@ export class Server{
 
     onData(callback?:(data:any)=>void){
         this.eventHub.subscribe("server.data", (msg:any, data:OnDataEvent)=>{
-            
             const payload = JSON.parse(data.Data.toString())
             const resp:Response = {
                 method: payload.method,

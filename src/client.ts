@@ -64,9 +64,10 @@ export class Client {
     call(method: string, data: any) {
         const req: Request = {
             method: method,
-            params: data,
+            params: [data],
             id: this.count++
         }
+        console.log(req)
         const buf = Buffer.from(JSON.stringify(req)+"\n")
 
         this.socket.write(buf)
