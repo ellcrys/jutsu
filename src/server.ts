@@ -40,7 +40,9 @@ export class Server{
     constructor(){
         this.eventHub = PubSub
         this.handlers = new TSMap<string, Handler>()
-        this.socket  = new net.Socket()
+        this.socket  = new net.Socket({
+            allowHalfOpen: false
+        })
         this.count = 0; 
 
         this.onData()

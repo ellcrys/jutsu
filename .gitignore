@@ -1,1 +1,4 @@
 node_modules
+src/testClient.ts
+src/testServer.ts
+src/testgoclient.ts

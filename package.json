@@ -17,6 +17,7 @@
   "devDependencies": {
     "@types/node": "^10.0.0",
     "@types/pubsub-js": "^1.5.18",
+    "@types/zmq": "0.0.22",
     "dts-generator": "^2.1.0",
     "gulp": "^3.9.1",
     "gulp-typescript": "^4.0.2",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "pubsub-js": "^1.6.0",
-    "typescript-map": "0.0.6"
+    "typescript-map": "0.0.6",
+    "zmq": "^2.15.3"
   }
 }

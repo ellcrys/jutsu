@@ -3,10 +3,10 @@ import * as net from "net"
 
 
 
-let conn = net.createConnection({
-    port: 4000
-})
 
+let conn = net.connect({
+    port:4000
+})
 let client = new Client(conn)
 client.handle("hello", (data)=>{
     console.log(data)

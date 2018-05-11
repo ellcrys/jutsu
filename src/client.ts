@@ -46,6 +46,9 @@ export class Client {
                 this.handlers.get(resp.method).fn(resp.params)
             }
         })
+
+
+        
     }
 
     handle(method: string, handleFunc: (...args: any[]) => any) {
@@ -67,10 +70,9 @@ export class Client {
             params: [data],
             id: this.count++
         }
-        
-        const buf = Buffer.from(JSON.stringify(req))
 
-        this.socket.write(buf)
+       const bool = this.socket.write(JSON.stringify(req)+"\r\n")
+     
     }
 
 
@@ -83,9 +85,14 @@ export class Client {
         this.socket.on("data", (buf: Buffer) => {
             this.eventHub.publish("client.data", buf)
         })
+
+        this.socket.on("end", (buf: Buffer) => {
+            
+        })
     }
 
     runWithServer(server: Server) {
+    
         this.socket.on("connect", () => {
             console.log("Jutsu Connected √")
             server.eventHub.publish("server.connected", {

@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"sync"
 
-	"github.com/cenkalti/rpc2" 
+	"github.com/cenkalti/rpc2"
 	"github.com/cenkalti/rpc2/jsonrpc"
 )
 
@@ -22,15 +23,15 @@ type Response struct {
 	Data   interface{} `json:"data"`
 }
 
+var wg sync.WaitGroup
+
 func main() {
-	conn, _ := net.Dial("tcp4", "127.0.0.1:4000")
+	conn, _ := net.Dial("tcp", "127.0.0.1:4000")
 
 	clt := rpc2.NewClientWithCodec(jsonrpc.NewJSONCodec(conn))
-
 	go clt.Run()
-
-	clt.Handle("hello", func(client *rpc2.Client, args interface{}, resp *Response) error {
-
+	clt.Handle("hello", func(client *rpc2.Client, args interface{}, resp *RespData) error {
+		fmt.Printf("%v\n", args)
 		buf, err := json.Marshal(args)
 
 		if err != nil {
@@ -38,6 +39,7 @@ func main() {
 		}
 		var data RespData
 		json.Unmarshal(buf, &data)
+		*resp = data
 
 		fmt.Println("hello called:", data.Name)
 
@@ -50,6 +52,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	clt.Call("add", data, nil)
+
+	// var resp RespData
+	_ = clt.Call("add", data, nil)
 
 }
