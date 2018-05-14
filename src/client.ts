@@ -23,13 +23,13 @@ interface Response {
 
 export class Client {
 
-    private handlers: TSMap<string, Handler>
+    handlers: TSMap<string, Handler>
 
     private eventHub: PubSubJS.Base;
 
     private count:number;
 
-    constructor(private socket: net.Socket) {
+    constructor(public socket: net.Socket) {
         this.eventHub = PubSub
         this.handlers = new TSMap<string, Handler>()
         this.count = 0
@@ -113,5 +113,9 @@ export class Client {
                 Data: buf
             })
         })
+    }
+
+    disconnect(){
+        this.socket.destroy()
     }
 }
