@@ -8,17 +8,18 @@ var Server = /** @class */ (function () {
     function Server() {
         this.eventHub = PubSub;
         this.handlers = new typescript_map_1.TSMap();
-        this.socket = new net.Socket();
+        this.socket = new net.Socket({
+            allowHalfOpen: false
+        });
         this.count = 0;
+        this.server = net.createServer();
         this.onData();
     }
     Server.prototype.handle = function (method, handleFunc) {
         if (this.handlers.has(method)) {
             throw new Error("Jutsu: multiple registrations for " + method);
         }
-        this.handlers.set(method, {
-            fn: handleFunc
-        });
+        this.handlers.set(method, handleFunc);
     };
     Server.prototype.onConnect = function (func) {
         this.eventHub.subscribe("server.connected", function (msg, data) {
@@ -30,20 +31,24 @@ var Server = /** @class */ (function () {
             func(data.Client);
         });
     };
-    Server.prototype.connect = function (port) {
+    Server.prototype.connect = function (port, callback) {
+        var _this = this;
         var self = this;
         var listener = function (socket) {
             var client = new client_1.Client(socket);
             client.runWithServer(self);
             self.socket = socket;
         };
-        var server = net.createServer(listener);
-        server.on("error", function (err) {
+        this.server = net.createServer(listener);
+        this.server.on("error", function (err) {
             throw new Error("Jutsu error: " + err.message);
         });
-        server = server.listen(port, function () {
-            console.log("Jutsu OK: Opened server on", server.address().address, server.address().port);
+        this.server.listen(port, function () {
+            console.log("Jutsu OK: Opened server on", _this.server.address().address, _this.server.address().port);
         });
+        if (callback) {
+            callback(this.server);
+        }
     };
     Server.prototype.onData = function (callback) {
         var _this = this;
@@ -55,12 +60,15 @@ var Server = /** @class */ (function () {
                 id: _this.count++
             };
             if (_this.handlers.has(resp.method)) {
-                _this.handlers.get(resp.method).fn(data.Client, resp.params);
+                _this.handlers.get(resp.method).call(_this, data.Client, resp.params);
                 if (callback != null) {
                     callback(resp.params);
                 }
             }
         });
+    };
+    Server.prototype.disconnect = function () {
+        this.server.close();
     };
     return Server;
 }());
