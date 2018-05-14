@@ -67,7 +67,6 @@ export class Server{
     }
 
     onConnect(func: (client:Client)=>void) {
-        console.log(func)
         this.eventHub.subscribe("server.connected", (msg:any, data:ConnectionEvent)=>{
             func(data.Client)
         })

@@ -35,8 +35,7 @@ var Client = /** @class */ (function () {
             params: [data],
             id: this.count++
         };
-        var buf = Buffer.from(JSON.stringify(req));
-        this.socket.write(buf);
+        var bool = this.socket.write(JSON.stringify(req) + "\r\n");
     };
     Client.prototype.run = function () {
         var _this = this;
@@ -45,6 +44,8 @@ var Client = /** @class */ (function () {
         });
         this.socket.on("data", function (buf) {
             _this.eventHub.publish("client.data", buf);
+        });
+        this.socket.on("end", function (buf) {
         });
     };
     Client.prototype.runWithServer = function (server) {
@@ -67,6 +68,9 @@ var Client = /** @class */ (function () {
                 Data: buf
             });
         });
+    };
+    Client.prototype.disconnect = function () {
+        this.socket.destroy();
     };
     return Client;
 }());
