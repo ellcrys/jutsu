@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "mocha -r ts-node/register src/test.ts",
+    "test": "mocha -r ts-node/register test/test.ts",
     "test-server": "ts-node src/testServer.ts",
     "test-client": "ts-node src/testClient.ts"
   },
