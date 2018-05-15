@@ -32,10 +32,11 @@ var Client = /** @class */ (function () {
     Client.prototype.call = function (method, data) {
         var req = {
             method: method,
-            params: [data],
+            params: [Buffer.from(data.toString()).toString('base64')],
             id: this.count++
         };
-        var bool = this.socket.write(JSON.stringify(req) + "\r\n");
+        var payload = JSON.stringify(req);
+        var bool = this.socket.write(payload + "\r\n");
     };
     Client.prototype.run = function () {
         var _this = this;
@@ -43,7 +44,7 @@ var Client = /** @class */ (function () {
             console.log("Jutsu Connected √");
         });
         this.socket.on("data", function (buf) {
-            _this.eventHub.publish("client.data", buf);
+            _this.eventHub.publish("client.data", buf.toString());
         });
         this.socket.on("end", function (buf) {
         });
