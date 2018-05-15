@@ -12,13 +12,13 @@ export interface Handler {
 interface Request {
     method: string,
     params: any,
-    id:number
+    id: number
 }
 
 interface Response {
     method: string,
     params: any,
-    id:number
+    id: number
 }
 
 export class Client {
@@ -27,14 +27,14 @@ export class Client {
 
     private eventHub: PubSubJS.Base;
 
-    private count:number;
+    private count: number;
 
     constructor(public socket: net.Socket) {
         this.eventHub = PubSub
         this.handlers = new TSMap<string, Handler>()
         this.count = 0
-        this.eventHub.subscribe("client.data", (msg:any, buf: Buffer) => {
-            
+        this.eventHub.subscribe("client.data", (msg: any, buf: Buffer) => {
+
             const payload = JSON.parse(buf.toString())
             const resp: Response = {
                 method: payload.method,
@@ -48,7 +48,7 @@ export class Client {
         })
 
 
-        
+
     }
 
     handle(method: string, handleFunc: (...args: any[]) => any) {
@@ -67,15 +67,13 @@ export class Client {
     call(method: string, data: any) {
         const req: Request = {
             method: method,
-            params: [data],
+            params: [Buffer.from(data.toString()).toString('base64')],
             id: this.count++
         }
+        let payload = JSON.stringify(req)
+        const bool = this.socket.write(payload + "\r\n")
 
-       const bool = this.socket.write(JSON.stringify(req)+"\r\n")
-     
     }
-
-
 
     run() {
         this.socket.on("connect", () => {
@@ -83,16 +81,18 @@ export class Client {
         })
 
         this.socket.on("data", (buf: Buffer) => {
-            this.eventHub.publish("client.data", buf)
+
+            this.eventHub.publish("client.data", buf.toString())
+
         })
 
         this.socket.on("end", (buf: Buffer) => {
-            
+
         })
     }
 
     runWithServer(server: Server) {
-    
+
         this.socket.on("connect", () => {
             console.log("Jutsu Connected √")
             server.eventHub.publish("server.connected", {
@@ -115,7 +115,7 @@ export class Client {
         })
     }
 
-    disconnect(){
+    disconnect() {
         this.socket.destroy()
     }
 }
