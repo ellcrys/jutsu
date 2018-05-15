@@ -44,7 +44,13 @@ var Client = /** @class */ (function () {
             console.log("Jutsu Connected √");
         });
         this.socket.on("data", function (buf) {
-            _this.eventHub.publish("client.data", buf.toString());
+            var data = buf.toString('utf8').split("\r\n");
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] != '') {
+                    var _data = Buffer.from(data[i]);
+                    _this.eventHub.publish("client.data", _data);
+                }
+            }
         });
         this.socket.on("end", function (buf) {
         });

@@ -81,9 +81,15 @@ export class Client {
         })
 
         this.socket.on("data", (buf: Buffer) => {
-
-            this.eventHub.publish("client.data", buf.toString())
-
+            let data = buf.toString('utf8').split("\r\n")
+            for(let i=0 ; i < data.length; i++){
+                if(data[i] != ''){
+                    let _data = Buffer.from(data[i])
+                    
+                    this.eventHub.publish("client.data", _data);
+                    
+                }
+            }
         })
 
         this.socket.on("end", (buf: Buffer) => {
